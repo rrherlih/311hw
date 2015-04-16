@@ -57,15 +57,12 @@ class Graphs:
 				
 				q.enqueue(v)
 			q.dequeue()
+		return(adj_list)
 
 	def odd_cycle(self, v, adj_list):
-		for x in adj_list:
-			if x != None:
-				print(x.get_parent())
 		cycle = [(adj_list[v].get_parent(), v)]
 		vertex = v
 		while True:
-			print(adj_list[vertex].get_adjs())
 			cycle.append((adj_list[adj_list[vertex].get_parent()].get_parent(), adj_list[vertex].get_parent()))
 			vertex = adj_list[adj_list[vertex].get_parent()].get_parent()
 			for i in adj_list[vertex].get_adjs():
@@ -76,8 +73,21 @@ class Graphs:
 	
 	def color_graph(self):
 		a = self.create_adj_list()
-		self.bfs(1, a)
+		adj_list = self.bfs(1, a)
 		print("This graph is two-colorable")
+		name = "{}-colored".format(self.graph)
+		target = open(name, 'w')
+		# if sys.argv[1] == 'smallgraph':
+		# 	target = open('smallgraph-colored', 'w')
+		# elif sys.argv[1] == 'largegraph1':
+		# 	target = open('largegraph1-colored', 'w')
+		# elif sys.argv[1] == 'largegraph1':
+		# 	target = open('largegraph2-colored', 'w')
+		# else:
+		# 	target
+		for i in range(1, len(adj_list)):
+			print(i, adj_list[i].get_color())
+			target.write("{} {}\n".format(i, adj_list[i].get_color()))
 
 	def edge_to_tuple(self, edge):
 		l = edge.split()
