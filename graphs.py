@@ -73,6 +73,8 @@ class Graphs:
 	
 	def color_graph(self):
 		a = self.create_adj_list()
+		for i in range(1, len(a)):
+			print(a[i].get_adjs())
 		adj_list = self.bfs(1, a)
 		print("This graph is two-colorable")
 		# name = "{}-colored".format(self.graph)
@@ -86,9 +88,9 @@ class Graphs:
 			target = open('largegraph2-colored', 'w')
 		else:
 			target = open('graph-colored', 'w')
-		for i in range(1, len(adj_list)):
-			print(i, adj_list[i].get_color())
-			target.write("{} {}\n".format(i, adj_list[i].get_color()))
+		# for i in range(1, len(adj_list)):
+		# 	print(i, adj_list[i].get_color())
+		# 	target.write("{} {}\n".format(i, adj_list[i].get_color()))
 
 	def edge_to_tuple(self, edge):
 		l = edge.split()
@@ -129,9 +131,6 @@ class Vertex:
 		self.color = -1
 		self.adjs = []
 		self.parent = None
-
-	def get_num(self):
-		return(self.num)
 
 	def get_color(self):
 		return(self.color)
