@@ -86,10 +86,13 @@ class Graphs:
 			target = open('largegraph2-colored', 'w')
 		else:
 			target = open('graph-colored', 'w')
+			target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
-			print(i, adj_list[i].get_color())
-			# target.write("{} {}\n".format(i, adj_list[i].get_color()))
-			target.write("{} {}\n".format(i, adj_list[i].get_adjs()))
+			# print(i, adj_list[i].get_color())
+			target.write("{} {}\n".format(i, adj_list[i].get_color()))
+		for i in range(1, len(adj_list)):
+			# print(i, adj_list[i].get_color())
+			target2.write("{} {}\n".format(i, adj_list[i].get_adjs()))
 
 	def edge_to_tuple(self, edge):
 		l = edge.split()
