@@ -88,6 +88,8 @@ class Graphs:
 			target = open('graph-colored', 'w')
 			target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
+			if adj_list[i].get_color() != -1:
+				print(i, adj_list[i].get_color())
 			# print(i, adj_list[i].get_color())
 			target.write("{} {}\n".format(i, adj_list[i].get_color()))
 		for i in range(1, len(adj_list)):
