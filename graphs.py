@@ -94,7 +94,12 @@ class Graphs:
 
 	def edge_to_tuple(self, edge):
 		l = edge.split()
-		return((int(l[0]), int(l[1])))
+		v1 = int(l[0])
+		v2 = int(l[1])
+		if v1 < v2:
+			return(v1, v2)
+		else:
+			return(v2, v1)
 	
 class Queue:
 
