@@ -28,12 +28,16 @@ class Graphs:
 			else:
 				edge = self.edge_to_tuple(line)
 				adj_list[edge[0]].add_adj(edge[1])
-		return(adj_list)
+				adj_list[edge[1]].add_adj(edge[0])
+		for i in range(1, len(adj_list)):
+			print(adj_list[i].get_adjs())
+		# return(adj_list)
 
 	def bfs(self, vertex, adj_list):
 		q = Queue()
 		q.enqueue(vertex)
 		adj_list[vertex].set_color(1)
+		minimum = 2
 
 		while q.is_empty() == False:
 			u = q.get_front()
@@ -54,8 +58,8 @@ class Graphs:
 						sys.exit()
 					else:
 						adj_list[v].set_color(1)
-				
-				q.enqueue(v)
+				if v != adj_list[u].get_parent():
+					q.enqueue(v)
 			q.dequeue()
 		return(adj_list)
 
@@ -78,15 +82,15 @@ class Graphs:
 		# name = "{}-colored".format(self.graph)
 		# print(name)
 		# target = open(name, 'w')
-		if sys.argv[1] == 'smallgraph':
-			target = open('smallgraph-colored', 'w')
-		elif sys.argv[1] == 'largegraph1':
-			target = open('largegraph1-colored', 'w')
-		elif sys.argv[1] == 'largegraph1':
-			target = open('largegraph2-colored', 'w')
-		else:
-			target = open('graph-colored', 'w')
-			target2 = open('graph-adj', 'w')
+		# if sys.argv[1] == 'smallgraph':
+		# 	target = open('smallgraph-colored', 'w')
+		# elif sys.argv[1] == 'largegraph1':
+		# 	target = open('largegraph1-colored', 'w')
+		# elif sys.argv[1] == 'largegraph1':
+		# 	target = open('largegraph2-colored', 'w')
+		# else:
+		target = open('graph-colored', 'w')
+		target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
 			if adj_list[i].get_color() != -1:
 				print(i, adj_list[i].get_color())
@@ -110,8 +114,10 @@ class Queue:
 	def __init__(self):
 		self.front = None
 		self.back = None
+		self.size = 0
 
 	def enqueue(self, v):
+		self.size += 1
 		item = [v, None]
 		if self.front == None:
 			self.front = item
@@ -121,6 +127,9 @@ class Queue:
 			self.back = item
 
 	def dequeue(self):
+		if self.is_empty() == True:
+			return
+		self.size -= 1
 		v = self.front[0]
 		self.front = self.front[1]
 		return(v)
@@ -133,6 +142,9 @@ class Queue:
 			return True
 		else:
 			return False
+
+	def get_size(self):
+		return(self.size)
 
 class Vertex:
 
@@ -161,7 +173,8 @@ class Vertex:
 
 def main():
 	g = Graphs(sys.argv[1])
-	g.color_graph()
+	# g.color_graph()
+	g.create_adj_list()
 
 if __name__ == '__main__':
 	main()
