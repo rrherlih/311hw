@@ -46,21 +46,27 @@ class Graphs:
 				if adj_list[v].get_visit() == 0:
 					adj_list[v].set_visit(1)
 					if c == 1:
+						adj_list[v].set_color(0)
+					if c == 0:
+						adj_list[v].set_color(1)
+					q.enqueue(v)	
+				if adj_list[v].get_visit() == 1:
+					if c == 1:
 						if adj_list[v].get_color() == 1:
 							print("Not two-colorable")
 							print(self.odd_cycle(v, adj_list))
 							sys.exit()
-						else:
-							adj_list[v].set_color(0)
+						# else:
+						# 	adj_list[v].set_color(0)
 					if c == 0:
 						if adj_list[v].get_color() == 0:
 							print("Not two-colorable")
 							print(self.odd_cycle(v, adj_list))
 							sys.exit()
-						else:
-							adj_list[v].set_color(1)
+						# else:
+						# 	adj_list[v].set_color(1)
 						
-					q.enqueue(v)
+					
 			q.dequeue()
 			adj_list[u].set_visit(2)
 		# return((adj_list, minimum))
