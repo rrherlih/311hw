@@ -71,17 +71,6 @@ class Graphs:
 	def odd_cycle(self, u, v, adj_list):
 		cycle = [u, v]
 		while True:
-			# p1 = adj_list[u].get_parent()
-			# p2 = adj_list[v].get_parent()
-			# print(p1, p2)
-			# if p1 == p2:
-			# 	cycle = [p1] + cycle
-			# 	return(cycle)
-			# cycle = [p1] + cycle
-			# cycle = cycle + [p2]			
-			# u = adj_list[p1].get_parent()
-			# v = adj_list[p2].get_parent()
-
 			u = adj_list[u].get_parent()
 			v = adj_list[v].get_parent()
 			# print(p1, p2)
@@ -90,17 +79,7 @@ class Graphs:
 				return(cycle)
 			cycle = [u] + cycle
 			cycle = cycle + [v]			
-
-			# else:
-			# 	cycle = [p1] + cycle
-			# 	cycle = cycle + [p2]			
-			# 	u = adj_list[p1].get_parent()
-			# 	v = adj_list[p2].get_parent()
-			# 	if u == v:
-			# 		cycle = [u] + cycle
-			# 		return(cycle)
-			# 	cycle = [u] + cycle
-			# 	cycle.append(v)
+		# print(adj_list[118934].get_adjs())
 	
 	def color_graph(self):
 		a = self.create_adj_list()
