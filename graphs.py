@@ -80,7 +80,15 @@ class Graphs:
 	
 	def color_graph(self):
 		a = self.create_adj_list()
-		adj_list = self.bfs(1, a)
+		# adj_list = self.bfs(1, a)
+		s = 1
+		while True:
+			adj_list = self.bfs(s, a)
+			a = adj_list
+			s = self.disconnect_check(adj_list)
+			if s == 0:
+				break
+
 		# minimum = 1
 		# while minimum <= a[0]:
 		# 	adj = self.bfs(minimum, a)
@@ -110,6 +118,12 @@ class Graphs:
 			return(v1, v2)
 		else:
 			return(v2, v1)
+
+	def disconnect_check(self, adj_list):
+		for i in range(1, len(adj_list)):
+			if adj_list[i].get_color() == -1:
+				return(i)
+		return(0)
 	
 class Queue:
 
