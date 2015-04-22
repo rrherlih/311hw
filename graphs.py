@@ -44,7 +44,6 @@ class Graphs:
 				
 				if adj_list[v].get_visit() == 0:
 					adj_list[v].set_parent(u)	
-					print(v, u)
 					adj_list[v].set_visit(1)
 					if c == 1:
 						adj_list[v].set_color(0)
@@ -74,6 +73,7 @@ class Graphs:
 		while True:
 			p1 = adj_list[u].get_parent()
 			p2 = adj_list[v].get_parent()
+			print(p1, p2)
 			if p1 == p2:
 				cycle = [p1] + cycle
 				return(cycle)
