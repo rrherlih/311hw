@@ -12,7 +12,7 @@ class Graphs:
 			return(open(filename))
 		except:
 			print("Error opening the graph.")
-			sys.exit()
+			usage()
 
 	def create_adj_list(self):
 		self.fd = self.open_file(self.graph)
@@ -53,14 +53,12 @@ class Graphs:
 				if adj_list[v].get_visit() == 1:
 					if c == 1:
 						if adj_list[v].get_color() == 1:
-							print("Not two-colorable")
-							print(self.odd_cycle(u, v, adj_list))
+							self.odd_cycle(u, v, adj_list)
 							sys.exit()
 
 					if c == 0:
 						if adj_list[v].get_color() == 0:
-							print("Not two-colorable")
-							print(self.odd_cycle(u, v, adj_list))
+							self.odd_cycle(u, v, adj_list)
 							sys.exit()			
 					
 			q.dequeue()
@@ -73,13 +71,17 @@ class Graphs:
 		while True:
 			u = adj_list[u].get_parent()
 			v = adj_list[v].get_parent()
-			# print(p1, p2)
 			if u == v:
 				cycle = [u] + cycle
-				return(cycle)
+				break
 			cycle = [u] + cycle
-			cycle = cycle + [v]			
-		# print(adj_list[118934].get_adjs())
+			cycle = cycle + [v]	
+
+		target = open('OddCycle.txt', 'w')
+		for i in cycle:
+			target.write("{}\n".format(i))	
+		target2 = self.output_name()
+		target2.write("no\n\nodd cycle")	
 	
 	def color_graph(self):
 		a = self.create_adj_list()
@@ -91,15 +93,17 @@ class Graphs:
 			if s == 0:
 				break
 
-		print("This graph is two-colorable")
-
-		target = open('graph-colored', 'w')
-		target2 = open('graph-adj', 'w')
+		target = self.output_name()
+		target.write("yes\n\nColoring:\n")
 		for i in range(1, len(adj_list)):
 			target.write("{} {}\n".format(i, adj_list[i].get_color()))
-		for i in range(1, len(adj_list)):
-			target2.write("{} {}\n".format(i, adj_list[i].get_adjs()))
 
+	def output_name(self):
+		path = self.graph.split('/')
+		name = "{}-Output".format(path[-1])
+		target = open(name, 'w')
+		return(target)
+		
 	def edge_to_tuple(self, edge):
 		l = edge.split()
 		v1 = int(l[0])
@@ -184,7 +188,13 @@ class Vertex:
 	def get_visit(self):
 		return(self.visit)
 
+def usage():
+	print("Usage:\npython3 graphs.py filename")
+	sys.exit()
+
 def main():
+	if len(sys.argv) != 2:
+		usage()
 	g = Graphs(sys.argv[1])
 	g.color_graph()
 
