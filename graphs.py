@@ -17,7 +17,7 @@ class Graphs:
 	def create_adj_list(self):
 		self.fd = self.open_file(self.graph)
 		num = int(self.fd.readline())
-		adj_list = [None]
+		adj_list = [num]
 		for i in range(1, num + 1):
 			adj_list.append(Vertex())
 
@@ -29,39 +29,40 @@ class Graphs:
 				edge = self.edge_to_tuple(line)
 				adj_list[edge[0]].add_adj(edge[1])
 				adj_list[edge[1]].add_adj(edge[0])
-		for i in range(1, len(adj_list)):
-			print(adj_list[i].get_adjs())
-		# return(adj_list)
+		return(adj_list)
 
 	def bfs(self, vertex, adj_list):
 		q = Queue()
 		q.enqueue(vertex)
 		adj_list[vertex].set_color(1)
-		minimum = 2
+		minimum = vertex + 1
 
 		while q.is_empty() == False:
 			u = q.get_front()
 			c = adj_list[u].get_color()
 			for v in adj_list[u].get_adjs():
-				adj_list[v].set_parent(u)
-				if c == 1:
-					if adj_list[v].get_color() == 1:
-						print("Not two-colorable")
-						print(self.odd_cycle(v, adj_list))
-						sys.exit()
-					else:
-						adj_list[v].set_color(0)
-				if c == 0:
-					if adj_list[v].get_color() == 0:
-						print("Not two-colorable")
-						print(self.odd_cycle(v, adj_list))
-						sys.exit()
-					else:
-						adj_list[v].set_color(1)
-				if v != adj_list[u].get_parent():
-					q.enqueue(v)
+				if v == minimum:
+					minimum = minimum + 1				
+				if adj_list[v].get_parent() == None:
+					adj_list[v].set_parent(u)	
+					if c == 1:
+						if adj_list[v].get_color() == 1:
+							print("Not two-colorable")
+							print(self.odd_cycle(v, adj_list))
+							sys.exit()
+						else:
+							adj_list[v].set_color(0)
+					if c == 0:
+						if adj_list[v].get_color() == 0:
+							print("Not two-colorable")
+							print(self.odd_cycle(v, adj_list))
+							sys.exit()
+						else:
+							adj_list[v].set_color(1)
+					if v != adj_list[u].get_parent():
+						q.enqueue(v)
 			q.dequeue()
-		return(adj_list)
+		return((adj_list, minimum))
 
 	def odd_cycle(self, v, adj_list):
 		cycle = [(adj_list[v].get_parent(), v)]
@@ -77,18 +78,14 @@ class Graphs:
 	
 	def color_graph(self):
 		a = self.create_adj_list()
-		adj_list = self.bfs(1, a)
+		minimum = 1
+		while minimum <= a[0]:
+			adj = self.bfs(minimum, a)
+			adj_list = adj[0]
+			minimum = adj[1]
+		# print(adj_list)
 		print("This graph is two-colorable")
-		# name = "{}-colored".format(self.graph)
-		# print(name)
-		# target = open(name, 'w')
-		# if sys.argv[1] == 'smallgraph':
-		# 	target = open('smallgraph-colored', 'w')
-		# elif sys.argv[1] == 'largegraph1':
-		# 	target = open('largegraph1-colored', 'w')
-		# elif sys.argv[1] == 'largegraph1':
-		# 	target = open('largegraph2-colored', 'w')
-		# else:
+
 		target = open('graph-colored', 'w')
 		target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
@@ -173,8 +170,7 @@ class Vertex:
 
 def main():
 	g = Graphs(sys.argv[1])
-	# g.color_graph()
-	g.create_adj_list()
+	g.color_graph()
 
 if __name__ == '__main__':
 	main()
