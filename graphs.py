@@ -82,6 +82,9 @@ class Graphs:
 				cycle = cycle + [p2]			
 				u = adj_list[p1].get_parent()
 				v = adj_list[p2].get_parent()
+				if u == v:
+					cycle = [u] + cycle
+					return(cycle)
 				cycle = [u] + cycle
 				cycle.append(v)
 	
