@@ -35,16 +35,16 @@ class Graphs:
 		q = Queue()
 		q.enqueue(vertex)
 		adj_list[vertex].set_color(1)
-		minimum = vertex + 1
+		adj_list[vertex].set_visit(1)
+		# minimum = vertex + 1
 
 		while q.is_empty() == False:
 			u = q.get_front()
 			c = adj_list[u].get_color()
 			for v in adj_list[u].get_adjs():
-				if v == minimum:
-					minimum = minimum + 1				
-				if adj_list[v].get_parent() == None:
-					adj_list[v].set_parent(u)	
+				adj_list[v].set_parent(u)	
+				if adj_list[v].get_visit() == 0:
+					adj_list[v].set_visit(1)
 					if c == 1:
 						if adj_list[v].get_color() == 1:
 							print("Not two-colorable")
@@ -59,10 +59,12 @@ class Graphs:
 							sys.exit()
 						else:
 							adj_list[v].set_color(1)
-					if v != adj_list[u].get_parent():
-						q.enqueue(v)
+						
+					q.enqueue(v)
 			q.dequeue()
-		return((adj_list, minimum))
+			adj_list[u].set_visit(2)
+		# return((adj_list, minimum))
+		return(adj_list)
 
 	def odd_cycle(self, v, adj_list):
 		cycle = [(adj_list[v].get_parent(), v)]
@@ -78,19 +80,22 @@ class Graphs:
 	
 	def color_graph(self):
 		a = self.create_adj_list()
-		minimum = 1
-		while minimum <= a[0]:
-			adj = self.bfs(minimum, a)
-			adj_list = adj[0]
-			minimum = adj[1]
+		adj_list = self.bfs(1, a)
+		# minimum = 1
+		# while minimum <= a[0]:
+		# 	adj = self.bfs(minimum, a)
+		# 	a = adj[0]
+		# 	minimum = adj[1]
+		# 	print(minimum)
+		# adj_list = a
 		# print(adj_list)
 		print("This graph is two-colorable")
 
 		target = open('graph-colored', 'w')
 		target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
-			if adj_list[i].get_color() != -1:
-				print(i, adj_list[i].get_color())
+			# if adj_list[i].get_color() != -1:
+			# 	print(i, adj_list[i].get_color())
 			# print(i, adj_list[i].get_color())
 			target.write("{} {}\n".format(i, adj_list[i].get_color()))
 		for i in range(1, len(adj_list)):
@@ -149,6 +154,7 @@ class Vertex:
 		self.color = -1
 		self.adjs = []
 		self.parent = None
+		self.visit = 0
 
 	def get_color(self):
 		return(self.color)
@@ -167,6 +173,12 @@ class Vertex:
 
 	def get_parent(self):
 		return(self.parent)
+
+	def set_visit(self, c):
+		self.visit = c
+
+	def get_visit(self):
+		return(self.visit)
 
 def main():
 	g = Graphs(sys.argv[1])
