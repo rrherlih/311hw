@@ -36,14 +36,15 @@ class Graphs:
 		q.enqueue(vertex)
 		adj_list[vertex].set_color(1)
 		adj_list[vertex].set_visit(1)
-		# minimum = vertex + 1
 
 		while q.is_empty() == False:
 			u = q.get_front()
 			c = adj_list[u].get_color()
 			for v in adj_list[u].get_adjs():
-				adj_list[v].set_parent(u)	
+				
 				if adj_list[v].get_visit() == 0:
+					adj_list[v].set_parent(u)	
+					print(v, u)
 					adj_list[v].set_visit(1)
 					if c == 1:
 						adj_list[v].set_color(0)
@@ -54,39 +55,38 @@ class Graphs:
 					if c == 1:
 						if adj_list[v].get_color() == 1:
 							print("Not two-colorable")
-							print(self.odd_cycle(v, adj_list))
+							print(self.odd_cycle(u, v, adj_list))
 							sys.exit()
-						# else:
-						# 	adj_list[v].set_color(0)
+
 					if c == 0:
 						if adj_list[v].get_color() == 0:
 							print("Not two-colorable")
-							print(self.odd_cycle(v, adj_list))
-							sys.exit()
-						# else:
-						# 	adj_list[v].set_color(1)
-						
+							print(self.odd_cycle(u, v, adj_list))
+							sys.exit()			
 					
 			q.dequeue()
 			adj_list[u].set_visit(2)
-		# return((adj_list, minimum))
+
 		return(adj_list)
 
-	def odd_cycle(self, v, adj_list):
-		cycle = [(adj_list[v].get_parent(), v)]
-		vertex = v
+	def odd_cycle(self, u, v, adj_list):
+		cycle = [u, v]
 		while True:
-			cycle.append((adj_list[adj_list[vertex].get_parent()].get_parent(), adj_list[vertex].get_parent()))
-			vertex = adj_list[adj_list[vertex].get_parent()].get_parent()
-			for i in adj_list[vertex].get_adjs():
-				if i == v:
-					cycle.append((vertex, v))
-					return(cycle)
-
+			p1 = adj_list[u].get_parent()
+			p2 = adj_list[v].get_parent()
+			if p1 == p2:
+				cycle = [p1] + cycle
+				return(cycle)
+			else:
+				cycle = [p1] + cycle
+				cycle = cycle + [p2]			
+				u = adj_list[p1].get_parent()
+				v = adj_list[p2].get_parent()
+				cycle = [u] + cycle
+				cycle.append(v)
 	
 	def color_graph(self):
 		a = self.create_adj_list()
-		# adj_list = self.bfs(1, a)
 		s = 1
 		while True:
 			adj_list = self.bfs(s, a)
@@ -95,25 +95,13 @@ class Graphs:
 			if s == 0:
 				break
 
-		# minimum = 1
-		# while minimum <= a[0]:
-		# 	adj = self.bfs(minimum, a)
-		# 	a = adj[0]
-		# 	minimum = adj[1]
-		# 	print(minimum)
-		# adj_list = a
-		# print(adj_list)
 		print("This graph is two-colorable")
 
 		target = open('graph-colored', 'w')
 		target2 = open('graph-adj', 'w')
 		for i in range(1, len(adj_list)):
-			# if adj_list[i].get_color() != -1:
-			# 	print(i, adj_list[i].get_color())
-			# print(i, adj_list[i].get_color())
 			target.write("{} {}\n".format(i, adj_list[i].get_color()))
 		for i in range(1, len(adj_list)):
-			# print(i, adj_list[i].get_color())
 			target2.write("{} {}\n".format(i, adj_list[i].get_adjs()))
 
 	def edge_to_tuple(self, edge):
